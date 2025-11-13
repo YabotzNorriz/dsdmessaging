@@ -47,9 +47,9 @@ public class ChatClientVisual extends JFrame implements MessageListener {
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel painelInput = new JPanel(new BorderLayout());
-        campoMensagemEnviar = new JTextField(); // Item (a)
-        campoDestinatario = new JTextField(10); // Item (b)
-        botaoEnviar = new JButton("Enviar"); // Item (d)
+        campoMensagemEnviar = new JTextField();
+        campoDestinatario = new JTextField(10);
+        botaoEnviar = new JButton("Enviar");
 
         JPanel painelDestinatario = new JPanel(new BorderLayout());
         painelDestinatario.add(new JLabel("Destinatário (código): "), BorderLayout.WEST);
