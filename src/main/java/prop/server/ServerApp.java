@@ -1,3 +1,8 @@
+/* 
+Trabalho feito por:
+Samuel Lucas Passos Santos - Email: a281012579@fumec.br - RA: 1A280921724
+João Pedro Andrade Paes Pimentel Barbosa - Email: a280921724@fumec.br - RA: 1A280921724
+*/
 package prop.server;
 
 import java.net.Socket;
@@ -8,6 +13,7 @@ public class ServerApp {
     private static final String BROKER_URL = "tcp://localhost:61616";
 
     public ServerApp() {
+        System.out.println("Trabalho feito por João Pedro Andrade Paes Pimentel Barbosa e Samuel Lucas Passos Santos");
         System.out.println("Classe --ServerApp-- invocada");
     }
 

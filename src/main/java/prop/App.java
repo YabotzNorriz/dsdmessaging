@@ -10,6 +10,9 @@ import prop.visual.ChatClientVisual;
 public class App {
     public static void main(String[] args) {
 
+        System.out.println(
+                "App iniciado\n Trabalho feito por João Pedro Andrade Paes Pimentel Barbosa e Samuel Lucas Passos Santos");
+
         String inputID = JOptionPane.showInputDialog("Digite seu ID/Nome de Cliente:");
         String clienteIDFinal;
 
