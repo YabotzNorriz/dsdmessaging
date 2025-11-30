@@ -1,0 +1,11 @@
+Alunos:
+- João Pedro Andrade Paes Pimentel Barbosa - E-mail: a280921724@fumec.br - RA: 1A280921724
+- Samuel Lucas Passos Santos - E-mail: a281012579@fumec.br - RA: 1A280921724
+
+Segue o trabalho feito, para isso utilizamos o maven e compilamos com o mesmo.
+
+Para a execução do programa é necessário rodar o seguinte comando:
+
+java -jar dsdmessaging-1.0-SNAPSHOT.jar
+
+(Haverá um arquivo .BAT e um .SH para auxilia-lo)
