@@ -35,12 +35,34 @@ public class ChatClientVisual extends JFrame implements MessageListener {
             e.printStackTrace();
             System.exit(1);
         }
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                closeConnection();
+            }
+        });
+
         setSize(600, 400);
         setVisible(true);
     }
 
     private void setupGUI() {
+        JPanel painelTopo = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        JButton botaoNovaJanela = new JButton("Nova Janela");
+
+        botaoNovaJanela.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Thread(() -> {
+                    prop.App.main(new String[] {});
+                }).start();
+            }
+        });
+
+        painelTopo.add(botaoNovaJanela);
+        add(painelTopo, BorderLayout.NORTH);
         areaMensagensRecebidas = new JTextArea();
         areaMensagensRecebidas.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(areaMensagensRecebidas);
@@ -85,7 +107,8 @@ public class ChatClientVisual extends JFrame implements MessageListener {
         Destination destination = session.createTopic(TOPIC_DESTINATION);
         producer = session.createProducer(destination);
 
-        consumer = session.createConsumer(destination);
+        String selector = "recipient IS NULL OR recipient = '" + nomeCliente + "'";
+        consumer = session.createConsumer(destination, selector);
         consumer.setMessageListener(this);
 
         areaMensagensRecebidas.append("Conectado ao Broker JMS com ID: " + nomeCliente + "\n");
@@ -125,20 +148,37 @@ public class ChatClientVisual extends JFrame implements MessageListener {
             try {
                 TextMessage textMessage = (TextMessage) message;
                 String remetente = textMessage.getStringProperty("sender");
-                String destinatario = textMessage.getStringProperty("recipient");
-
-                if (destinatario == null || destinatario.equalsIgnoreCase(nomeCliente)) {
-                    String texto = textMessage.getText();
-
-                    String prefixo = (destinatario != null) ? "[PRIVADO de " + remetente + "]: "
-                            : "[" + remetente + "]: ";
-
-                    areaMensagensRecebidas.append(prefixo + texto + "\n");
-                    areaMensagensRecebidas.setCaretPosition(areaMensagensRecebidas.getDocument().getLength());
+                String destinatarioMsg = null;
+                if (textMessage.propertyExists("recipient")) {
+                    destinatarioMsg = textMessage.getStringProperty("recipient");
                 }
+
+                String texto = textMessage.getText();
+                String prefixo;
+
+                if (destinatarioMsg != null) {
+                    prefixo = "[PRIVADO de " + remetente + "]: ";
+                } else {
+                    prefixo = "[" + remetente + "]: ";
+                }
+
+                areaMensagensRecebidas.append(prefixo + texto + "\n");
+                areaMensagensRecebidas.setCaretPosition(areaMensagensRecebidas.getDocument().getLength());
+
             } catch (JMSException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void closeConnection() {
+        try {
+            if (connection != null) {
+                connection.close();
+                System.out.println("Cliente " + nomeCliente + " desconectado.");
+            }
+        } catch (JMSException e) {
+            e.printStackTrace();
         }
     }
 
